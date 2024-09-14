@@ -20,10 +20,22 @@ app.get('/', function (req, res) {
 });
 
 // your first API endpoint...
-app.get('/api/hello', function (req, res) {
-  res.json({ greeting: 'hello API' });
-});
+app.get('/api/whoami', (req, res) => {
+  // Extracting IP address, preferred language, and software from headers
+  const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  const language = req.headers['accept-language'] || 'unknown';
+  const software = req.headers['user-agent'] || 'unknown';
 
+  // Creating response object
+  const response = {
+      ipaddress: ipAddress,
+      language: language,
+      software: software
+  };
+
+  // Sending JSON response
+  res.json(response);
+});
 // listen for requests :)
 var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
